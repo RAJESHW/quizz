@@ -7,45 +7,83 @@ class App extends Component {
         this.state = {
             data: {},
             index: 0,
+            isLoading: false,
+            examFinished: false,
         }
     }
     componentDidMount() {
         fetch('./json/quiz.json')
             .then(res => res.json())
             .then(json => {
-                this.setState({data: json});
+                this.setState({
+                    data: json,
+                    isLoading: true,
+                });
             });
     }
     handleClick = (e) => {
-        console.log(e.target, this); // eslint-disable-line
         let {index : indexCounter } = this.state;
-        this.setState({index: indexCounter+1})
+
+        if (e.target.innerHTML === 'Previous') {
+            this.setState({index: indexCounter-1});
+        } else if (e.target.innerHTML === 'Next') {
+            this.setState({index: indexCounter+1});
+        } else if (e.target.innerHTML === 'Finish') {
+            this.setState({ examFinished: true });
+        }
+    };
+    renderData = () => {
+        const { data, index } = this.state;
+        const item = data.quiz[index];
+        return (
+            <div className="questions">
+                <div className="App-intro">
+                    { item.question }
+                </div>
+                <div className="options">
+                {item.options.map((element) =>
+                    <div key={element}>
+                        <input type="radio" name="options"/>{element}
+                    </div>
+                    )}
+                </div>
+                <div className="button-container">
+                    { index !== 0
+                    ? <button className="button" onClick={this.handleClick}>Previous</button>
+                    : null }
+                    <button className="button" onClick={this.handleClick}>{ this.isFinish() }</button>
+                </div>
+            </div> )
+    };
+    isFinish = () => {
+        const { data, index } = this.state;
+        const eachQuestion = data.quiz;
+        debugger;
+        if (eachQuestion[index] === eachQuestion[eachQuestion.length-1]) {
+            return 'Finish';
+        } else {
+            return 'Next';
+        }
+    };
+    renderExam = () => {
+        const { isLoading, examFinished } = this.state;
+        if (!examFinished) {
+            if (isLoading) {
+                return this.renderData()
+            } else {
+                return ( <img src="bgLoad.gif" alt="loading" /> );
+            }
+        } else {
+            return ( <div className="finish-message"> Thank you for attending exam </div> );
+        }
     }
     render() {
-        const { data, index } = this.state;
-        const item = Object.keys(data).length !== 0 ? data.quiz[index] : {};
         return (
             <div className="App" >
                 <div className="App-header">
                     <h2> Quizz </h2>
                 </div>
-                { Object.keys(item).length !== 0
-                ?   <div>
-                    {console.log(item) }
-                        <div className="App-intro">
-                            { item.question }
-                        </div>
-                        <div>
-                            {item.options.map((element) =>
-                                <div key={element}>
-                                    <input type="radio" name="options"/>{element}
-                                </div>
-                            )}
-                        </div>
-                        <button onClick={this.handleClick}>Next</button>
-                     </div>
-                : <img src="bgLoad.gif" alt="loading" />
-                }
+                { this.renderExam() }
             </div>
         );
     }

@@ -1,19 +1,29 @@
-.App {
-  text-align: center;
-}
-
 .App-header {
   background-color: #222;
   height: px;
   padding: 10px;
   color: white;
+  text-align: center;
 }
 
 .App-intro {
   font-size: large;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.button {
+  margin-top: 20px;
+  width: 100px;
+}
+
+.questions {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.finish-message {
+  text-align: center;
+  margin-top: 50px;
+  font-size: xx-large;
 }
