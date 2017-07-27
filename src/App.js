@@ -7,7 +7,7 @@ class App extends Component {
         this.state = {
             data: {},
             index: 0,
-            isLoading: false,
+            isLoading: true,
             examFinished: false,
         }
     }
@@ -17,7 +17,7 @@ class App extends Component {
             .then(json => {
                 this.setState({
                     data: json,
-                    isLoading: true,
+                    isLoading: false,
                 });
             });
     }
@@ -38,7 +38,7 @@ class App extends Component {
         return (
             <div className="questions">
                 <div className="App-intro">
-                    { item.question }
+                  <span>{ index + 1 + ')' }</span>  { item.question }
                 </div>
                 <div className="options">
                 {item.options.map((element) =>
@@ -68,10 +68,14 @@ class App extends Component {
     renderExam = () => {
         const { isLoading, examFinished } = this.state;
         if (!examFinished) {
-            if (isLoading) {
+            if (!isLoading) {
                 return this.renderData()
             } else {
-                return ( <img src="bgLoad.gif" alt="loading" /> );
+                return (
+                <div className="loader">
+                    <img src="bgLoad.gif" alt="loading" />
+                </div>
+                );
             }
         } else {
             return ( <div className="finish-message"> Thank you for attending exam </div> );
