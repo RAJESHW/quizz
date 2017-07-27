@@ -1,9 +1,10 @@
 To Run the project
 
+- Download the project unzip it and follow the steps
 - `npm i` to install modules
 - `npm start` to start the server
 
-Prequistes
+Prerequisites
 
 - Node anything @latest 
 
